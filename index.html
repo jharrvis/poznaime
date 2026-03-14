@@ -144,6 +144,136 @@ body { background: #F7F8FA; color: #111111; font-family: 'Inter', sans-serif; -w
   position: relative;
   overflow: hidden;
 }
+
+/* Portfolio Value Mode Toggle */
+.value-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F7F8FA;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid #E5E7EB;
+}
+.value-mode-toggle button {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.15s;
+  border: none;
+  background: transparent;
+  color: #6B7280;
+  cursor: pointer;
+}
+.value-mode-toggle button.active {
+  background: white;
+  color: #111;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.value-mode-toggle .mode-label {
+  font-size: 11px;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+/* Hero Main Event Styles */
+.main-event-hero {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.25);
+}
+.main-event-hero .event-category {
+  color: rgba(255,255,255,0.8);
+}
+.main-event-hero h2 {
+  color: white;
+  font-size: 26px;
+  line-height: 1.3;
+}
+.main-event-hero .probability-bar {
+  background: rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 16px;
+}
+.main-event-hero .probability-value {
+  color: white;
+}
+.main-event-hero .trade-preview {
+  background: rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 12px;
+}
+.main-event-hero .trade-preview span {
+  color: white;
+}
+.main-event-hero .trade-preview .win-amount {
+  color: #86efac;
+}
+.main-event-hero .event-meta {
+  border-top-color: rgba(255,255,255,0.2);
+}
+.main-event-hero .event-meta p {
+  color: rgba(255,255,255,0.7);
+}
+.main-event-hero .event-meta .value {
+  color: white;
+}
+.main-event-hero .why-matters {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.9);
+}
+
+/* Market Card Hierarchy */
+.market-card .market-question {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #111;
+  margin-bottom: 12px;
+}
+.market-card .market-probability {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.market-card .market-profit {
+  font-size: 13px;
+  font-weight: 600;
+  color: #16A34A;
+  margin-bottom: 10px;
+}
+.market-card .market-meta {
+  font-size: 11px;
+  color: #9CA3AF;
+  display: flex;
+  gap: 12px;
+}
+
+/* Trade Card New Layout */
+.trade-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.trade-card-probability {
+  font-size: 18px;
+  font-weight: 800;
+}
+.trade-card-payout {
+  font-size: 13px;
+  font-weight: 700;
+  color: #16A34A;
+}
+.trade-card-loss {
+  font-size: 11px;
+  color: #6B7280;
+  margin-top: 6px;
+}
 </style>
 </head>
 <body>
@@ -293,38 +423,41 @@ body { background: #F7F8FA; color: #111111; font-family: 'Inter', sans-serif; -w
 
   <!-- MAIN EVENT -->
   <section class="cursor-pointer" onclick="navigate('market')">
-    <div class="flex items-center gap-1 mb-2 text-textMuted text-xs font-semibold uppercase tracking-wider">
+    <div class="flex items-center gap-1 mb-3 text-textMuted text-xs font-semibold uppercase tracking-wider">
       <span class="text-accent">⭐ MAIN EVENT</span>
     </div>
-    <div class="bg-card rounded-card p-5 shadow-soft border border-border hover:border-accent/40 transition-colors">
-      <div class="text-accent font-medium text-sm mb-1">Politics</div>
-      <h2 class="text-[22px] font-bold text-textMain leading-tight mb-4">Will Bulgaria adopt the Euro before Jan 1, 2026?</h2>
+    <div class="bg-card rounded-card p-0 shadow-soft border border-border hover:border-accent/40 transition-colors overflow-hidden main-event-hero">
+      <div class="p-6">
+        <div class="event-category font-medium text-sm mb-2">Politics</div>
+        <h2 class="text-[26px] font-bold leading-tight mb-5">Will Bulgaria adopt the Euro before Jan 1, 2026?</h2>
 
-      <div class="flex gap-4 mb-4">
-        <div class="flex-1 bg-yes/10 rounded-xl p-3 flex justify-between items-center">
-          <span class="font-bold text-yes">YES</span>
-          <span class="font-bold text-[24px] text-textMain">63%</span>
+        <div class="probability-bar flex gap-4 mb-4">
+          <div class="flex-1 flex flex-col items-center">
+            <span class="probability-value font-bold text-[32px]">63%</span>
+            <span class="text-xs opacity-70">YES</span>
+          </div>
+          <div class="w-px bg-white/20"></div>
+          <div class="flex-1 flex flex-col items-center">
+            <span class="probability-value font-bold text-[32px]">37%</span>
+            <span class="text-xs opacity-70">NO</span>
+          </div>
         </div>
-        <div class="flex-1 bg-no/10 rounded-xl p-3 flex justify-between items-center">
-          <span class="font-bold text-no">NO</span>
-          <span class="font-bold text-[24px] text-textMain">37%</span>
+
+        <div class="trade-preview flex items-center gap-2 mb-4">
+          <span class="font-medium text-sm">Invest €10</span>
+          <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          <span class="win-amount font-bold text-sm">Win €15.87</span>
         </div>
-      </div>
 
-      <div class="flex items-center gap-2 mb-4 bg-bg rounded-lg p-3">
-        <span class="text-textMain font-medium text-sm">Invest €10</span>
-        <svg class="w-4 h-4 text-textMuted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-        <span class="text-yes font-bold text-sm">Win €15.87</span>
-      </div>
+        <div class="event-meta grid grid-cols-3 gap-2 text-xs border-t pt-4 mb-4">
+          <div><p class="font-medium value">€420K</p><p class="opacity-70">Volume</p></div>
+          <div><p class="font-medium value">12 days</p><p class="opacity-70">Closes in</p></div>
+          <div><p class="font-medium value">High</p><p class="opacity-70">Liquidity</p></div>
+        </div>
 
-      <div class="grid grid-cols-3 gap-2 text-xs text-textMuted border-t border-border pt-4 mb-4">
-        <div><p class="font-medium text-textMain">€420K</p><p>Volume</p></div>
-        <div><p class="font-medium text-textMain">12 days</p><p>Closes in</p></div>
-        <div><p class="font-medium text-textMain">High</p><p>Liquidity</p></div>
-      </div>
-
-      <div class="bg-blue-50 text-accent p-3 rounded-xl text-sm">
-        <strong>Why it matters:</strong> EU Commission confirms progress on Euro roadmap.
+        <div class="why-matters p-3 rounded-xl text-sm">
+          <strong>Why it matters:</strong> EU Commission confirms progress on Euro roadmap.
+        </div>
       </div>
     </div>
   </section>
@@ -332,18 +465,20 @@ body { background: #F7F8FA; color: #111111; font-family: 'Inter', sans-serif; -w
   <!-- TRENDING BULGARIAN MARKETS -->
   <section class="market-section" data-category="bulgarian,sports">
     <h3 class="font-bold text-lg mb-4 flex items-center gap-2"><span class="text-xl">🇧🇬</span> Trending Bulgarian Markets</h3>
-    <div class="bg-card rounded-card p-5 shadow-soft border border-border cursor-pointer hover:border-accent/40 transition-colors" onclick="navigate('market')">
-      <div class="text-textMuted font-medium text-sm mb-1">Sports</div>
-      <h3 class="text-lg font-bold text-textMain leading-snug mb-3">Will Ludogorets win the Bulgarian efbet Professional "A" League in 2026?</h3>
-      <div class="flex gap-4 mb-3">
-        <span class="font-bold text-[18px] text-yes">YES 71%</span>
-        <span class="font-bold text-[18px] text-no">NO 29%</span>
+    <div class="bg-card rounded-card p-5 shadow-soft border border-border cursor-pointer hover:border-accent/40 transition-colors market-card" onclick="navigate('market')">
+      <div class="text-textMuted font-medium text-xs mb-2">Sports</div>
+      <h3 class="market-question">Will Ludogorets win the Bulgarian efbet Professional "A" League in 2026?</h3>
+      <div class="market-probability">
+        <span class="text-yes">YES 71%</span>
+        <span class="text-no ml-2">NO 29%</span>
       </div>
-      <div class="text-sm text-textMuted flex items-center gap-1.5 mb-3">
-        Invest €10 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Win <span class="text-yes font-semibold">€14.08</span>
+      <div class="market-profit">
+        Invest €10 <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Win <span class="text-yes font-semibold">€14.08</span>
       </div>
-      <div class="flex gap-4 text-xs text-textMuted">
-        <span>Vol: €190K</span><span>Close: 45d</span><span>Medium liquidity</span>
+      <div class="market-meta">
+        <span>Vol: €190K</span>
+        <span>Close: 45d</span>
+        <span>Medium liquidity</span>
       </div>
     </div>
   </section>
@@ -351,15 +486,20 @@ body { background: #F7F8FA; color: #111111; font-family: 'Inter', sans-serif; -w
   <!-- MOST TRADED TODAY -->
   <section class="market-section" data-category="crypto">
     <h3 class="font-bold text-lg mb-4 flex items-center gap-2"><span class="text-xl">🔥</span> Most Traded Today</h3>
-    <div class="bg-card rounded-card p-5 shadow-soft border border-border cursor-pointer hover:border-accent/40 transition-colors" onclick="navigate('market')">
-      <div class="text-textMuted font-medium text-sm mb-1">Crypto</div>
-      <h3 class="text-lg font-bold text-textMain leading-snug mb-3">Will Bitcoin exceed €100K before 2027?</h3>
-      <div class="flex gap-4 mb-3">
-        <span class="font-bold text-[18px] text-yes">YES 41%</span>
-        <span class="font-bold text-[18px] text-no">NO 59%</span>
+    <div class="bg-card rounded-card p-5 shadow-soft border border-border cursor-pointer hover:border-accent/40 transition-colors market-card" onclick="navigate('market')">
+      <div class="text-textMuted font-medium text-xs mb-2">Crypto</div>
+      <h3 class="market-question">Will Bitcoin exceed €100K before 2027?</h3>
+      <div class="market-probability">
+        <span class="text-yes">YES 41%</span>
+        <span class="text-no ml-2">NO 59%</span>
       </div>
-      <div class="flex gap-4 text-xs text-textMuted">
-        <span>Vol: €1.2M</span><span>Close: 140d</span><span>High liquidity</span>
+      <div class="market-profit">
+        Invest €10 <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Win <span class="text-yes font-semibold">€24.39</span>
+      </div>
+      <div class="market-meta">
+        <span>Vol: €1.2M</span>
+        <span>Close: 140d</span>
+        <span>High liquidity</span>
       </div>
     </div>
   </section>
@@ -368,20 +508,26 @@ body { background: #F7F8FA; color: #111111; font-family: 'Inter', sans-serif; -w
   <section class="market-section" data-category="politics,economy">
     <h3 class="font-bold text-lg mb-4 flex items-center gap-2"><span class="text-xl">✨</span> New Markets</h3>
     <div class="space-y-3">
-      <div class="bg-card rounded-card p-4 shadow-soft border border-border cursor-pointer hover:border-accent/40 transition-colors" onclick="navigate('market')">
+      <div class="bg-card rounded-card p-4 shadow-soft border border-border cursor-pointer hover:border-accent/40 transition-colors market-card" onclick="navigate('market')">
         <div class="text-textMuted font-medium text-xs mb-1">Economy</div>
-        <h4 class="font-bold text-sm mb-2">Will Bulgaria's GDP growth exceed 3% in 2026?</h4>
-        <div class="flex gap-3 text-xs">
-          <span class="font-bold text-yes">YES 54%</span>
-          <span class="font-bold text-no">NO 46%</span>
+        <h4 class="market-question text-sm mb-2">Will Bulgaria's GDP growth exceed 3% in 2026?</h4>
+        <div class="market-probability text-sm">
+          <span class="text-yes">YES 54%</span>
+          <span class="text-no ml-2">NO 46%</span>
+        </div>
+        <div class="market-profit text-xs">
+          Invest €10 <svg class="w-2.5 h-2.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Win <span class="text-yes font-semibold">€18.52</span>
         </div>
       </div>
-      <div class="bg-card rounded-card p-4 shadow-soft border border-border cursor-pointer hover:border-accent/40 transition-colors" onclick="navigate('market')">
+      <div class="bg-card rounded-card p-4 shadow-soft border border-border cursor-pointer hover:border-accent/40 transition-colors market-card" onclick="navigate('market')">
         <div class="text-textMuted font-medium text-xs mb-1">Politics</div>
-        <h4 class="font-bold text-sm mb-2">Will there be early parliamentary elections in 2026?</h4>
-        <div class="flex gap-3 text-xs">
-          <span class="font-bold text-yes">YES 38%</span>
-          <span class="font-bold text-no">NO 62%</span>
+        <h4 class="market-question text-sm mb-2">Will there be early parliamentary elections in 2026?</h4>
+        <div class="market-probability text-sm">
+          <span class="text-yes">YES 38%</span>
+          <span class="text-no ml-2">NO 62%</span>
+        </div>
+        <div class="market-profit text-xs">
+          Invest €10 <svg class="w-2.5 h-2.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Win <span class="text-yes font-semibold">€26.32</span>
         </div>
       </div>
     </div>
@@ -513,7 +659,7 @@ body { background: #F7F8FA; color: #111111; font-family: 'Inter', sans-serif; -w
 
   <!-- Trade Entry Preview -->
   <div class="bg-card rounded-card p-6 shadow-soft border border-border border-l-4 border-l-accent text-center">
-    <h3 class="font-bold text-lg mb-2">Buy YES or NO</h3>
+    <h3 class="font-bold text-lg mb-2">Trade this market</h3>
     <p class="text-sm text-textMain mb-4">Invest €10 <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Win <strong class="text-yes">€15.87</strong> if correct</p>
     <button onclick="navigate('trade')" class="w-full bg-accent text-white py-3 rounded-btn font-bold text-base hover:bg-blue-700 transition-colors">Open Trade</button>
   </div>
@@ -583,18 +729,22 @@ body { background: #F7F8FA; color: #111111; font-family: 'Inter', sans-serif; -w
   <!-- Outcome Cards -->
   <div class="grid grid-cols-2 gap-4">
     <div id="btn-trade-yes" class="yes-bg-tint rounded-card p-4 cursor-pointer selected transition-all" onclick="selectTrade('yes')">
-      <div class="font-bold text-yes text-xl mb-1">YES</div>
+      <div class="trade-card-header">
+        <div class="trade-card-probability text-yes">YES 63%</div>
+        <div class="trade-card-payout">€10 → €15.87</div>
+      </div>
       <p class="text-[11px] font-medium text-textMain mb-3 h-8">If Bulgaria adopts the Euro</p>
-      <div class="text-sm font-bold text-yes mb-1" id="preview-win-yes">Win €15.87</div>
-      <div class="text-xs text-textMuted mb-4" id="preview-loss-yes">Max loss €10</div>
-      <button class="w-full bg-yes text-white py-2 rounded-btn font-bold text-sm hover:bg-green-700 transition-colors" onclick="confirmTrade('yes')">Buy YES</button>
+      <div class="trade-card-loss">Max loss €10</div>
+      <button class="w-full mt-3 bg-yes text-white py-2 rounded-btn font-bold text-sm hover:bg-green-700 transition-colors" onclick="confirmTrade('yes')">Buy YES</button>
     </div>
     <div id="btn-trade-no" class="no-bg-tint rounded-card p-4 cursor-pointer transition-all" onclick="selectTrade('no')">
-      <div class="font-bold text-no text-xl mb-1">NO</div>
+      <div class="trade-card-header">
+        <div class="trade-card-probability text-no">NO 37%</div>
+        <div class="trade-card-payout">€10 → €27.02</div>
+      </div>
       <p class="text-[11px] font-medium text-textMain mb-3 h-8">If Bulgaria does NOT adopt</p>
-      <div class="text-sm font-bold text-no mb-1" id="preview-win-no">Win €27.02</div>
-      <div class="text-xs text-textMuted mb-4" id="preview-loss-no">Max loss €10</div>
-      <button class="w-full bg-white border border-no text-no py-2 rounded-btn font-bold text-sm hover:bg-red-50 transition-colors" onclick="confirmTrade('no')">Buy NO</button>
+      <div class="trade-card-loss">Max loss €10</div>
+      <button class="w-full mt-3 bg-white border border-no text-no py-2 rounded-btn font-bold text-sm hover:bg-red-50 transition-colors" onclick="confirmTrade('no')">Buy NO</button>
     </div>
   </div>
 
@@ -623,6 +773,15 @@ body { background: #F7F8FA; color: #111111; font-family: 'Inter', sans-serif; -w
     <div class="flex items-center gap-2 mt-2">
       <span class="bg-yes/15 text-yes font-bold px-2 py-0.5 rounded text-sm">+€32.00</span>
       <span class="text-textMuted text-sm">Today</span>
+    </div>
+    
+    <!-- Portfolio Value Mode Toggle -->
+    <div class="mt-4 flex items-center justify-between">
+      <div class="value-mode-toggle">
+        <button id="mode-realistic" class="active" onclick="setPortfolioValueMode('realistic')">Realistic Exit</button>
+        <button id="mode-market" onclick="setPortfolioValueMode('market')">Market Estimate</button>
+      </div>
+      <span class="text-xs text-textMuted" id="value-mode-label">Current value if sold now</span>
     </div>
   </div>
 
@@ -1236,14 +1395,19 @@ function updateTradePreview() {
   const winN = (amt / noProb).toFixed(2);
   const fee = (amt * 0.005).toFixed(2);
 
-  document.getElementById('preview-win-yes').innerText = `Win €${winY}`;
-  document.getElementById('preview-loss-yes').innerText = `Max loss €${amt.toFixed(2)}`;
-
-  document.getElementById('preview-win-no').innerText = `Win €${winN}`;
-  document.getElementById('preview-loss-no').innerText = `Max loss €${amt.toFixed(2)}`;
+  // Update trade cards with new layout
+  const yesCardPayout = document.querySelector('#btn-trade-yes .trade-card-payout');
+  const noCardPayout = document.querySelector('#btn-trade-no .trade-card-payout');
+  const yesCardLoss = document.querySelector('#btn-trade-yes .trade-card-loss');
+  const noCardLoss = document.querySelector('#btn-trade-no .trade-card-loss');
   
+  if (yesCardPayout) yesCardPayout.textContent = `€${amt} → €${winY}`;
+  if (noCardPayout) noCardPayout.textContent = `€${amt} → €${winN}`;
+  if (yesCardLoss) yesCardLoss.textContent = `Max loss €${amt.toFixed(2)}`;
+  if (noCardLoss) noCardLoss.textContent = `Max loss €${amt.toFixed(2)}`;
+
   // Update fee display
-  const feeEl = document.querySelector('#preview-details .fee') || 
+  const feeEl = document.querySelector('#preview-details .fee') ||
     document.querySelectorAll('.bg-bg.rounded-lg p-4 div')[2];
   if (feeEl) feeEl.innerHTML = `<span class="text-textMuted">Fee (0.5%)</span><span class="font-medium">€${fee}</span>`;
 }
@@ -1296,6 +1460,38 @@ function togglePositionDetail(btn) {
   } else {
     detail.classList.add('hidden');
     btn.innerText = 'View details';
+  }
+}
+
+// ============================================
+// PORTFOLIO VALUE MODE TOGGLE
+// ============================================
+let portfolioValueMode = 'realistic'; // 'realistic' or 'market'
+
+function setPortfolioValueMode(mode) {
+  portfolioValueMode = mode;
+  
+  // Update toggle buttons
+  document.getElementById('mode-realistic').classList.toggle('active', mode === 'realistic');
+  document.getElementById('mode-market').classList.toggle('active', mode === 'market');
+  
+  // Update label
+  const labelEl = document.getElementById('value-mode-label');
+  if (mode === 'realistic') {
+    labelEl.textContent = 'Current value if sold now';
+    // Realistic exit value (accounts for slippage and fees)
+    updatePortfolioValue(1380); // Lower value due to exit costs
+  } else {
+    labelEl.textContent = 'Theoretical market value';
+    // Market estimate (full theoretical value)
+    updatePortfolioValue(1420); // Full market value
+  }
+}
+
+function updatePortfolioValue(value) {
+  const portfolioHeader = document.querySelector('#page-portfolio h1');
+  if (portfolioHeader) {
+    portfolioHeader.textContent = '€' + value.toFixed(2);
   }
 }
 
