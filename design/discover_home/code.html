@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@300;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-container": "#a5a5aa",
+              "secondary-fixed-dim": "#c8c6c8",
+              "on-tertiary-fixed": "#1a1b1f",
+              "on-secondary-fixed": "#1b1b1d",
+              "on-primary-fixed-variant": "#5d4201",
+              "inverse-on-surface": "#313031",
+              "surface": "#131314",
+              "surface-container-low": "#1c1b1c",
+              "on-background": "#e5e2e3",
+              "background": "#131314",
+              "on-secondary-fixed-variant": "#474649",
+              "primary": "#e9c176",
+              "error-container": "#93000a",
+              "on-primary-container": "#4e3700",
+              "secondary": "#c8c6c8",
+              "on-tertiary": "#2f3034",
+              "surface-container-lowest": "#0e0e0f",
+              "surface-container": "#201f20",
+              "tertiary": "#c6c6cb",
+              "on-surface-variant": "#d1c5b4",
+              "outline-variant": "#4e4639",
+              "primary-fixed": "#ffdea5",
+              "on-secondary-container": "#b6b4b7",
+              "outline": "#9a8f80",
+              "on-error-container": "#ffdad6",
+              "inverse-surface": "#e5e2e3",
+              "on-surface": "#e5e2e3",
+              "inverse-primary": "#775a19",
+              "on-tertiary-container": "#3a3b3f",
+              "on-tertiary-fixed-variant": "#46464b",
+              "tertiary-fixed": "#e3e2e7",
+              "on-secondary": "#303032",
+              "on-primary": "#412d00",
+              "on-error": "#690005",
+              "tertiary-fixed-dim": "#c6c6cb",
+              "surface-variant": "#353436",
+              "primary-container": "#c5a059",
+              "on-primary-fixed": "#261900",
+              "secondary-container": "#474649",
+              "surface-bright": "#3a393a",
+              "primary-fixed-dim": "#e9c176",
+              "surface-tint": "#e9c176",
+              "surface-container-high": "#2a2a2b",
+              "error": "#ffb4ab",
+              "surface-dim": "#131314",
+              "secondary-fixed": "#e4e2e4",
+              "surface-container-highest": "#353436"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-card {
+        background: rgba(42, 42, 43, 0.8);
+        backdrop-filter: blur(20px);
+      }
+      .gold-gradient {
+        background: linear-gradient(135deg, #e9c176 0%, #c5a059 100%);
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #131314;
+        color: #e5e2e3;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-surface/80 backdrop-blur-md px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface" data-icon="menu">menu</span>
+<img alt="POZNAIME Logo" class="h-8 w-auto" data-alt="POZNAIME brand logo gold star icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmDhhJ3m3A78akYM8PCUY7G6MpB0UNVDSGcmL4TaXtwrhOjRs5ny3gh_Z24i86Fn1limQ9C_2v0X19iFvknNWhLw1MtHUKzz0xqFsgMotNFv32LnOZfCbEPg5-x9woP7r9_XmA6R3qpZgePVvIXRlsDPRiWJICcWQs_CY1P-lZT3EdDBWsh1z7UVT9zgcY-FrV8WASJ_lVlJkSFb5l-r5_en-cPPOzpz0WLowAJUSrCfynMZEpDkajuYgjAhQ_oWVmWxpUn-gEBOc"/>
+<span class="font-headline font-bold text-lg tracking-widest text-on-surface">POZNAIME</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface" data-icon="notifications">notifications</span>
+</div>
+</header>
+<main class="flex-grow px-6 pt-8 pb-24 max-w-5xl mx-auto w-full">
+<!-- Personalized Greeting -->
+<section class="mb-10">
+<div class="flex flex-col gap-1">
+<span class="text-on-surface-variant font-label text-sm uppercase tracking-[0.2em]">Private Client</span>
+<h1 class="font-headline text-4xl font-light text-on-surface">Good morning, Julian.</h1>
+</div>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Portfolio Overview (Large Card) -->
+<div class="md:col-span-8 bg-surface-container-low rounded-xl p-8 flex flex-col justify-between min-h-[320px]">
+<div>
+<h2 class="text-on-surface-variant font-label text-xs uppercase tracking-widest mb-2">Portfolio Total</h2>
+<div class="flex items-baseline gap-2">
+<span class="font-headline text-5xl font-light text-on-surface">$2,840,912</span>
+<span class="text-primary font-body text-sm">+1.24% today</span>
+</div>
+</div>
+<!-- Simple Gold Chart Representation -->
+<div class="mt-8 relative h-32 w-full overflow-hidden">
+<svg class="w-full h-full" viewbox="0 0 400 100">
+<path d="M0 80 Q 50 70, 100 75 T 200 40 T 300 50 T 400 10" fill="none" stroke="#e9c176" stroke-width="2"></path>
+<defs>
+<lineargradient id="glow" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#e9c176" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#e9c176" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0 80 Q 50 70, 100 75 T 200 40 T 300 50 T 400 10 V 100 H 0 Z" fill="url(#glow)"></path>
+</svg>
+</div>
+</div>
+<!-- News/Market Trends (Tall Card) -->
+<div class="md:col-span-4 bg-surface-container-high rounded-xl p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline text-lg text-on-surface">Market Brief</h3>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="trending_up">trending_up</span>
+</div>
+<div class="space-y-6">
+<div class="group cursor-pointer">
+<p class="text-xs text-on-surface-variant mb-1">Wall Street Journal • 12m ago</p>
+<h4 class="font-body text-sm font-medium leading-snug group-hover:text-primary transition-colors">Treasury yields stabilize after quarterly inflation report.</h4>
+</div>
+<div class="group cursor-pointer">
+<p class="text-xs text-on-surface-variant mb-1">Financial Times • 1h ago</p>
+<h4 class="font-body text-sm font-medium leading-snug group-hover:text-primary transition-colors">Global tech index sees resilient growth in emerging markets.</h4>
+</div>
+<div class="group cursor-pointer">
+<p class="text-xs text-on-surface-variant mb-1">Bloomberg • 3h ago</p>
+<h4 class="font-body text-sm font-medium leading-snug group-hover:text-primary transition-colors">Gold reaches 6-month high amid currency fluctuations.</h4>
+</div>
+</div>
+<button class="mt-auto pt-6 text-primary text-xs font-label uppercase tracking-widest flex items-center gap-2">
+                    Read Full Brief <span class="material-symbols-outlined text-xs" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Featured Assets (Horizontal Grid) -->
+<div class="md:col-span-12">
+<div class="flex justify-between items-end mb-6">
+<h3 class="font-headline text-xl text-on-surface">Featured Opportunities</h3>
+<button class="text-on-surface-variant text-xs font-label uppercase tracking-widest">View All</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Asset Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-5 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="token">token</span>
+</div>
+<span class="text-primary text-xs font-medium">+8.2%</span>
+</div>
+<h4 class="font-body text-sm font-semibold text-on-surface">Premium Equities</h4>
+<p class="text-xs text-on-surface-variant mt-1">Growth Focused</p>
+</div>
+<!-- Asset Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-5 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+</div>
+<span class="text-secondary text-xs font-medium">+2.1%</span>
+</div>
+<h4 class="font-body text-sm font-semibold text-on-surface">Sovereign Bonds</h4>
+<p class="text-xs text-on-surface-variant mt-1">Steady Income</p>
+</div>
+<!-- Asset Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-5 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="apartment">apartment</span>
+</div>
+<span class="text-primary text-xs font-medium">+12.4%</span>
+</div>
+<h4 class="font-body text-sm font-semibold text-on-surface">Metropolitan RE</h4>
+<p class="text-xs text-on-surface-variant mt-1">Tangible Wealth</p>
+</div>
+<!-- Asset Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-5 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="diamond">diamond</span>
+</div>
+<span class="text-primary text-xs font-medium">+4.7%</span>
+</div>
+<h4 class="font-body text-sm font-semibold text-on-surface">Luxury Indices</h4>
+<p class="text-xs text-on-surface-variant mt-1">Exclusive Tier</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-surface-container-low/90 backdrop-blur-xl border-t border-outline-variant/20 px-4 h-20 flex items-center justify-around z-50">
+<div class="flex flex-col items-center gap-1 group cursor-pointer text-primary">
+<span class="material-symbols-outlined text-2xl" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[10px] font-label uppercase tracking-tighter">Home</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="monitoring">monitoring</span>
+<span class="text-[10px] font-label uppercase tracking-tighter">Market</span>
+</div>
+<div class="relative -top-6">
+<div class="gold-gradient w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-on-primary text-3xl" data-icon="swap_horizontal_circle">swap_horizontal_circle</span>
+</div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-label uppercase tracking-tighter text-on-surface-variant">Trade</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="text-[10px] font-label uppercase tracking-tighter">Portfolio</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-2xl" data-icon="person">person</span>
+<span class="text-[10px] font-label uppercase tracking-tighter">Profile</span>
+</div>
+</nav>
+</body></html>

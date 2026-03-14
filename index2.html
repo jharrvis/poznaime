@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>POZNAIME | Private Client Platform</title>
+<meta name="description" content="Premium private investment platform for portfolio management, trading, and market insights."/>
+<meta name="theme-color" content="#fdf8f0"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="POZNAIME"/>
+<link rel="apple-touch-icon" href="assets/img/logo.png"/>
+<link rel="manifest" href="manifest.json"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{
+  "surface":"#fdf8f0",
+  "surface-container-lowest":"#ffffff",
+  "surface-container-low":"#f7f1e8",
+  "surface-container":"#f1ebe0",
+  "surface-container-high":"#ebe4d9",
+  "surface-container-highest":"#e5ddd2",
+  "surface-bright":"#fdf8f0",
+  "surface-variant":"#ece0cc",
+  "on-surface":"#1c1b17",
+  "on-surface-variant":"#4e4637",
+  "background":"#fdf8f0",
+  "on-background":"#1c1b17",
+  "primary":"#775a19",
+  "primary-fixed":"#ffdea5",
+  "primary-fixed-dim":"#e9c176",
+  "primary-container":"#ffdea5",
+  "on-primary":"#ffffff",
+  "on-primary-fixed":"#261900",
+  "on-primary-container":"#261900",
+  "on-primary-fixed-variant":"#5d4201",
+  "secondary":"#6c5e3e",
+  "secondary-container":"#f5dfa8",
+  "secondary-fixed":"#ffdea5",
+  "secondary-fixed-dim":"#e9c176",
+  "on-secondary":"#ffffff",
+  "on-secondary-container":"#231b00",
+  "on-secondary-fixed":"#231b00",
+  "on-secondary-fixed-variant":"#5b4a25",
+  "tertiary":"#4d6645",
+  "tertiary-container":"#cfecbf",
+  "tertiary-fixed":"#cfecbf",
+  "tertiary-fixed-dim":"#b3d0a4",
+  "on-tertiary":"#ffffff",
+  "on-tertiary-container":"#0b2008",
+  "on-tertiary-fixed":"#0b2008",
+  "on-tertiary-fixed-variant":"#364e2f",
+  "outline":"#7f7260",
+  "outline-variant":"#d1c4b0",
+  "error":"#ba1a1a",
+  "error-container":"#ffdad6",
+  "on-error":"#ffffff",
+  "on-error-container":"#410002",
+  "inverse-surface":"#332f25",
+  "inverse-on-surface":"#f7f0e4",
+  "inverse-primary":"#e9c176",
+  "surface-tint":"#775a19",
+  "surface-dim":"#e0d5c8"
+},fontFamily:{headline:["Manrope"],body:["Inter"],label:["Inter"]},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"}}}}
+</script>
+<style>
+*{-webkit-font-smoothing:antialiased;box-sizing:border-box}
+body{background:#fdf8f0;color:#1c1b17;font-family:'Inter',sans-serif;min-height:100dvh;overflow-x:hidden}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.gold-gradient{background:linear-gradient(135deg,#e9c176 0%,#c5a059 100%)}
+.glass-card{background:rgba(247,241,232,0.9);backdrop-filter:blur(20px)}
+.sparkline-glow{filter:drop-shadow(0 0 4px rgba(119,90,25,0.3))}
+.chart-glow{filter:drop-shadow(0 0 10px rgba(119,90,25,0.2))}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#fdf8f0}::-webkit-scrollbar-thumb{background:#d1c4b0;border-radius:10px}
+
+/* Page transitions */
+.page{display:none;animation:fadeIn .25s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Offcanvas */
+#offcanvas{position:fixed;top:0;left:-300px;width:280px;height:100vh;background:#f7f1e8;z-index:200;transition:left .3s cubic-bezier(.4,0,.2,1);border-right:1px solid rgba(209,196,176,.5)}
+#offcanvas.open{left:0}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:199;opacity:0;pointer-events:none;transition:opacity .3s}
+#overlay.open{opacity:1;pointer-events:all}
+
+/* Bottom nav active */
+.nav-btn.active .nav-icon{color:#775a19}
+.nav-btn.active .nav-label{color:#775a19}
+.nav-btn .nav-icon,.nav-btn .nav-label{color:#7f7260;transition:color .2s}
+
+/* Price ticker */
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-inner{display:flex;animation:tickerScroll 30s linear infinite;white-space:nowrap}
+
+/* Pulse dot */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pulse-dot{animation:pulse 2s ease-in-out infinite}
+</style>
+</head>
+<body>
+
+<!-- Offcanvas Overlay -->
+<div id="overlay" onclick="closeMenu()"></div>
+
+<!-- Offcanvas Panel -->
+<div id="offcanvas">
+  <div class="p-6 flex items-center gap-3 border-b border-outline-variant/40 mb-4">
+    <img src="assets/img/logo.png" alt="POZNAIME Logo" class="h-9 w-9 object-contain"/>
+    <span class="font-headline font-bold text-xl tracking-wider text-on-surface">POZNAIME</span>
+  </div>
+  <nav class="px-4 space-y-1">
+    <a onclick="navigate('home');closeMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container cursor-pointer text-on-surface-variant hover:text-primary transition-colors">
+      <span class="material-symbols-outlined text-xl">home</span><span class="font-body text-sm">Home</span>
+    </a>
+    <a onclick="navigate('market');closeMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container cursor-pointer text-on-surface-variant hover:text-primary transition-colors">
+      <span class="material-symbols-outlined text-xl">monitoring</span><span class="font-body text-sm">Market</span>
+    </a>
+    <a onclick="navigate('trade');closeMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container cursor-pointer text-on-surface-variant hover:text-primary transition-colors">
+      <span class="material-symbols-outlined text-xl">swap_horizontal_circle</span><span class="font-body text-sm">Trade</span>
+    </a>
+    <a onclick="navigate('portfolio');closeMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container cursor-pointer text-on-surface-variant hover:text-primary transition-colors">
+      <span class="material-symbols-outlined text-xl">account_balance_wallet</span><span class="font-body text-sm">Portfolio</span>
+    </a>
+  </nav>
+  <div class="absolute bottom-8 left-0 right-0 px-6">
+    <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-container">
+      <div class="w-9 h-9 rounded-full gold-gradient flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-primary text-lg">person</span>
+      </div>
+      <div><p class="text-sm font-medium text-on-surface">Julian Reyes</p><p class="text-xs text-on-surface-variant">Private Client</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Top Header -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl border-b border-outline-variant/30">
+  <div class="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <button onclick="openMenu()" class="p-1 rounded-lg hover:bg-surface-container transition-colors" id="hamburger-btn">
+        <span class="material-symbols-outlined text-on-surface text-2xl">menu</span>
+      </button>
+      <img src="assets/img/logo.png" alt="POZNAIME Logo" class="h-8 w-8 object-contain"/>
+      <span class="font-headline font-bold text-lg tracking-widest text-on-surface">POZNAIME</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="relative">
+        <span class="material-symbols-outlined text-on-surface cursor-pointer hover:text-primary transition-colors">notifications</span>
+        <span class="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full pulse-dot"></span>
+      </div>
+      <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center cursor-pointer">
+        <span class="material-symbols-outlined text-on-primary text-sm">person</span>
+      </div>
+    </div>
+  </div>
+  <!-- Live Ticker -->
+  <div class="border-t border-outline-variant/30 overflow-hidden h-8 flex items-center bg-surface-container-lowest/70">
+    <div class="ticker-inner text-xs font-label gap-8 px-4" id="ticker"></div>
+  </div>
+</header>
+
+<!-- ===== PAGE: HOME ===== -->
+<div id="page-home" class="page active pt-24 pb-28 px-5 max-w-5xl mx-auto">
+  <section class="mb-10">
+    <span class="text-on-surface-variant font-label text-xs uppercase tracking-[.2em]">Private Client</span>
+    <h1 class="font-headline text-4xl font-light text-on-surface mt-1">Good morning, Julian.</h1>
+  </section>
+
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+    <!-- Portfolio Card -->
+    <div class="md:col-span-8 bg-surface-container-low rounded-xl p-7 flex flex-col justify-between min-h-[300px] shadow-sm">
+      <div>
+        <h2 class="text-on-surface-variant font-label text-xs uppercase tracking-widest mb-2">Portfolio Total</h2>
+        <div class="flex items-baseline gap-2">
+          <span class="font-headline text-5xl font-light text-on-surface" id="home-total">$2,840,912</span>
+          <span class="text-primary font-body text-sm">+1.24% today</span>
+        </div>
+      </div>
+      <div class="mt-6 relative h-36 w-full">
+        <canvas id="homeChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Market Brief -->
+    <div class="md:col-span-4 bg-surface-container-high rounded-xl p-6 flex flex-col shadow-sm">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="font-headline text-lg text-on-surface">Market Brief</h3>
+        <span class="material-symbols-outlined text-primary text-sm">trending_up</span>
+      </div>
+      <div class="space-y-5">
+        <div class="cursor-pointer group">
+          <p class="text-xs text-on-surface-variant mb-1">Wall Street Journal • 12m ago</p>
+          <h4 class="font-body text-sm font-medium leading-snug group-hover:text-primary transition-colors">Treasury yields stabilize after quarterly inflation report.</h4>
+        </div>
+        <div class="cursor-pointer group">
+          <p class="text-xs text-on-surface-variant mb-1">Financial Times • 1h ago</p>
+          <h4 class="font-body text-sm font-medium leading-snug group-hover:text-primary transition-colors">Global tech index sees resilient growth in emerging markets.</h4>
+        </div>
+        <div class="cursor-pointer group">
+          <p class="text-xs text-on-surface-variant mb-1">Bloomberg • 3h ago</p>
+          <h4 class="font-body text-sm font-medium leading-snug group-hover:text-primary transition-colors">Gold reaches 6-month high amid currency fluctuations.</h4>
+        </div>
+      </div>
+      <button class="mt-auto pt-5 text-primary text-xs font-label uppercase tracking-widest flex items-center gap-2 hover:opacity-80 transition-opacity">
+        Read Full Brief <span class="material-symbols-outlined text-xs">arrow_forward</span>
+      </button>
+    </div>
+
+    <!-- Featured Opportunities -->
+    <div class="md:col-span-12">
+      <div class="flex justify-between items-end mb-5">
+        <h3 class="font-headline text-xl text-on-surface">Featured Opportunities</h3>
+        <button class="text-on-surface-variant text-xs font-label uppercase tracking-widest hover:text-primary transition-colors">View All</button>
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 hover:bg-surface-container transition-colors cursor-pointer shadow-sm">
+          <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined">token</span>
+            </div>
+            <span class="text-primary text-xs font-medium">+8.2%</span>
+          </div>
+          <h4 class="font-body text-sm font-semibold text-on-surface">Premium Equities</h4>
+          <p class="text-xs text-on-surface-variant mt-1">Growth Focused</p>
+        </div>
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 hover:bg-surface-container transition-colors cursor-pointer shadow-sm">
+          <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined">account_balance</span>
+            </div>
+            <span class="text-secondary text-xs font-medium">+2.1%</span>
+          </div>
+          <h4 class="font-body text-sm font-semibold text-on-surface">Sovereign Bonds</h4>
+          <p class="text-xs text-on-surface-variant mt-1">Steady Income</p>
+        </div>
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 hover:bg-surface-container transition-colors cursor-pointer shadow-sm">
+          <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined">apartment</span>
+            </div>
+            <span class="text-primary text-xs font-medium">+12.4%</span>
+          </div>
+          <h4 class="font-body text-sm font-semibold text-on-surface">Metropolitan RE</h4>
+          <p class="text-xs text-on-surface-variant mt-1">Tangible Wealth</p>
+        </div>
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 hover:bg-surface-container transition-colors cursor-pointer shadow-sm">
+          <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined">diamond</span>
+            </div>
+            <span class="text-primary text-xs font-medium">+4.7%</span>
+          </div>
+          <h4 class="font-body text-sm font-semibold text-on-surface">Luxury Indices</h4>
+          <p class="text-xs text-on-surface-variant mt-1">Exclusive Tier</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE: MARKET ===== -->
+<div id="page-market" class="page pt-24 pb-28 px-5 max-w-5xl mx-auto">
+  <section class="mb-10">
+    <h2 class="font-headline text-3xl font-bold text-on-surface mb-5">Market Insights</h2>
+    <div class="relative max-w-xl">
+      <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+        <span class="material-symbols-outlined text-outline">search</span>
+      </div>
+      <input class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl py-3.5 pl-12 pr-5 text-on-surface placeholder:text-outline focus:ring-1 focus:ring-primary/50 transition-all duration-300 text-sm" placeholder="Search assets, ETFs, or sectors..." type="text"/>
+    </div>
+  </section>
+
+  <!-- Market Stats -->
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+    <div class="bg-surface-container-low p-6 rounded-xl flex flex-col justify-between h-36 shadow-sm border border-outline-variant/20">
+      <span class="text-on-surface-variant font-label text-xs uppercase tracking-wider">S&P 500</span>
+      <div>
+        <div class="font-headline text-2xl font-bold" id="sp500-price">5,241.53</div>
+        <div class="text-primary text-sm flex items-center gap-1 mt-1">
+          <span class="material-symbols-outlined text-xs">arrow_upward</span>+1.24%
+        </div>
+      </div>
+    </div>
+    <div class="bg-surface-container-low p-6 rounded-xl flex flex-col justify-between h-36 shadow-sm border border-outline-variant/20">
+      <span class="text-on-surface-variant font-label text-xs uppercase tracking-wider">Nasdaq 100</span>
+      <div>
+        <div class="font-headline text-2xl font-bold" id="ndx-price">18,307.98</div>
+        <div class="text-primary text-sm flex items-center gap-1 mt-1">
+          <span class="material-symbols-outlined text-xs">arrow_upward</span>+0.85%
+        </div>
+      </div>
+    </div>
+    <div class="bg-surface-container-low p-6 rounded-xl flex flex-col justify-between h-36 shadow-sm border border-outline-variant/20 relative overflow-hidden">
+      <div class="absolute -right-4 -bottom-4 opacity-5">
+        <span class="material-symbols-outlined text-9xl">trending_up</span>
+      </div>
+      <span class="text-on-surface-variant font-label text-xs uppercase tracking-wider">Market Sentiment</span>
+      <div>
+        <div class="font-headline text-2xl font-bold">Greed</div>
+        <div class="text-on-surface-variant text-sm">Index: 72/100</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Watchlist -->
+  <section class="space-y-1 mb-12">
+    <div class="flex items-center justify-between px-2 mb-4">
+      <h3 class="font-headline text-xl font-semibold">Watchlist</h3>
+      <button class="text-primary text-sm font-medium flex items-center gap-1">
+        <span class="material-symbols-outlined text-sm">filter_list</span> Refine
+      </button>
+    </div>
+    <div class="hidden md:grid grid-cols-12 gap-4 px-5 py-2 text-xs font-label uppercase tracking-widest text-outline">
+      <div class="col-span-4">Asset</div><div class="col-span-3 text-center">Last 24h</div>
+      <div class="col-span-3 text-right">Price</div><div class="col-span-2 text-right">Change</div>
+    </div>
+    <div class="space-y-1" id="watchlist-items"></div>
+  </section>
+
+  <!-- Market Chart -->
+  <section class="mb-10">
+    <h3 class="font-headline text-xl font-semibold mb-5">S&P 500 Chart</h3>
+    <div class="bg-surface-container-low rounded-xl p-6 shadow-sm border border-outline-variant/20">
+      <canvas id="marketChart" height="120"></canvas>
+    </div>
+  </section>
+
+  <!-- Stories -->
+  <section>
+    <h3 class="font-headline text-xl font-semibold mb-5">Market Stories</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="bg-surface-container-low overflow-hidden rounded-xl flex cursor-pointer hover:bg-surface-container transition-colors shadow-sm border border-outline-variant/20">
+        <div class="p-5 flex flex-col justify-between flex-1">
+          <div class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Technology</div>
+          <h4 class="font-headline font-bold text-base leading-snug">Tech Rally Continues as AI Demand Surges Across Enterprise</h4>
+          <div class="text-xs text-on-surface-variant mt-3">2h ago • Bloomberg</div>
+        </div>
+        <div class="w-24 bg-surface-container-highest flex-shrink-0 flex items-center justify-center">
+          <span class="material-symbols-outlined text-5xl text-outline-variant">computer</span>
+        </div>
+      </div>
+      <div class="bg-surface-container-low overflow-hidden rounded-xl flex cursor-pointer hover:bg-surface-container transition-colors shadow-sm border border-outline-variant/20">
+        <div class="p-5 flex flex-col justify-between flex-1">
+          <div class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Economy</div>
+          <h4 class="font-headline font-bold text-base leading-snug">Fed Signals Potential Rate Cut in Q3 Amid Cooling Inflation Data</h4>
+          <div class="text-xs text-on-surface-variant mt-3">5h ago • Reuters</div>
+        </div>
+        <div class="w-24 bg-surface-container-highest flex-shrink-0 flex items-center justify-center">
+          <span class="material-symbols-outlined text-5xl text-outline-variant">account_balance</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== PAGE: TRADE ===== -->
+<div id="page-trade" class="page pt-24 pb-28 px-5 max-w-5xl mx-auto">
+  <!-- Asset Header -->
+  <header class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center shadow-sm">
+        <span class="material-symbols-outlined text-primary text-2xl">monitoring</span>
+      </div>
+      <div>
+        <h1 class="font-headline text-3xl font-bold tracking-tight">Apple Inc.</h1>
+        <p class="text-on-surface-variant font-label text-sm">AAPL · NASDAQ</p>
+      </div>
+    </div>
+    <div class="text-left md:text-right">
+      <p class="text-on-surface-variant font-label text-xs mb-1 uppercase tracking-widest">Current Price</p>
+      <div class="flex items-baseline gap-3 md:justify-end">
+        <span class="font-headline text-5xl font-extrabold tracking-tighter" id="trade-price">$192.53</span>
+        <span class="text-primary font-semibold text-lg" id="trade-change">+2.45%</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+    <!-- Chart -->
+    <div class="lg:col-span-8 bg-surface-container-low rounded-xl p-6 flex flex-col shadow-sm border border-outline-variant/20">
+      <div class="flex items-center justify-between mb-5">
+        <div class="flex bg-surface-container-high rounded-full p-1 gap-1" id="trade-time-btns">
+          <button onclick="updateTradeChart('1D',this)" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-surface-container-lowest text-primary shadow-sm">1D</button>
+          <button onclick="updateTradeChart('1W',this)" class="px-4 py-1.5 rounded-full text-xs font-semibold text-on-surface-variant">1W</button>
+          <button onclick="updateTradeChart('1M',this)" class="px-4 py-1.5 rounded-full text-xs font-semibold text-on-surface-variant">1M</button>
+          <button onclick="updateTradeChart('1Y',this)" class="px-4 py-1.5 rounded-full text-xs font-semibold text-on-surface-variant">1Y</button>
+        </div>
+        <div class="flex items-center gap-2 text-on-surface-variant text-xs">
+          <span class="w-2 h-2 rounded-full bg-primary pulse-dot"></span> Live Market Data
+        </div>
+      </div>
+      <canvas id="tradeChart" height="200"></canvas>
+    </div>
+
+    <!-- Trade Panel -->
+    <div class="lg:col-span-4 flex flex-col gap-5">
+      <div class="bg-surface-container-low rounded-xl p-6 flex flex-col gap-5 shadow-sm border border-outline-variant/20">
+        <div class="space-y-3">
+          <label class="text-xs font-label uppercase tracking-widest text-on-surface-variant">Amount to Invest</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-headline text-xl">$</span>
+            <input class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl py-4 pl-10 pr-4 font-headline text-2xl font-bold focus:ring-1 focus:ring-primary text-on-surface" type="text" value="1,200.00" id="trade-amount"/>
+          </div>
+          <div class="flex justify-between text-xs font-label text-on-surface-variant px-1">
+            <span id="trade-shares">Est. 6.23 Shares</span>
+            <span>Balance: $14,500.40</span>
+          </div>
+        </div>
+        <div class="flex flex-col gap-3">
+          <button class="gold-gradient w-full py-4 rounded-full font-headline font-extrabold text-on-primary text-sm uppercase tracking-widest hover:brightness-110 transition-all shadow-md">Buy Apple</button>
+          <button class="w-full py-4 rounded-full font-headline font-bold text-on-surface text-sm uppercase tracking-widest border border-outline-variant hover:bg-surface-container-high transition-all">Sell</button>
+        </div>
+      </div>
+      <div class="bg-surface-container-low rounded-xl p-5 grid grid-cols-2 gap-4 shadow-sm border border-outline-variant/20">
+        <div><p class="text-[10px] font-label uppercase tracking-tighter text-on-surface-variant">Market Cap</p><p class="font-headline font-bold text-sm">2.98T</p></div>
+        <div><p class="text-[10px] font-label uppercase tracking-tighter text-on-surface-variant">P/E Ratio</p><p class="font-headline font-bold text-sm">31.24</p></div>
+        <div><p class="text-[10px] font-label uppercase tracking-tighter text-on-surface-variant">52W High</p><p class="font-headline font-bold text-sm">$199.62</p></div>
+        <div><p class="text-[10px] font-label uppercase tracking-tighter text-on-surface-variant">Dividend</p><p class="font-headline font-bold text-sm">0.52%</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Position -->
+  <section class="mt-10 space-y-5">
+    <h2 class="font-headline text-xl font-bold">Your Position</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="bg-surface-container-lowest p-5 rounded-xl flex items-center gap-4 shadow-sm border border-outline-variant/20">
+        <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined">pie_chart</span>
+        </div>
+        <div><p class="text-xs font-label text-on-surface-variant">Total Shares</p><p class="font-headline font-extrabold text-xl">42.50</p></div>
+      </div>
+      <div class="bg-surface-container-lowest p-5 rounded-xl flex items-center gap-4 shadow-sm border border-outline-variant/20">
+        <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined">payments</span>
+        </div>
+        <div><p class="text-xs font-label text-on-surface-variant">Avg. Cost</p><p class="font-headline font-extrabold text-xl">$178.20</p></div>
+      </div>
+      <div class="bg-surface-container-lowest p-5 rounded-xl flex items-center gap-4 shadow-sm border border-outline-variant/20">
+        <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined">trending_up</span>
+        </div>
+        <div><p class="text-xs font-label text-on-surface-variant">Total Return</p><p class="font-headline font-extrabold text-xl text-primary">+$609.02</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== PAGE: PORTFOLIO ===== -->
+<div id="page-portfolio" class="page pt-24 pb-28 px-5 max-w-5xl mx-auto">
+  <section class="mb-10">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-5">
+      <div>
+        <p class="font-label text-xs uppercase tracking-[.2em] text-on-surface-variant mb-2">Total Net Worth</p>
+        <h2 class="font-headline text-5xl md:text-6xl font-extrabold text-on-surface tracking-tight">$842,592.14</h2>
+        <div class="flex items-center gap-2 mt-3">
+          <span class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+            <span class="material-symbols-outlined text-sm mr-1">trending_up</span>+12.4%
+          </span>
+          <span class="text-on-surface-variant text-sm">from last month</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 w-full md:w-auto">
+        <div class="p-4 bg-surface-container-low rounded-xl shadow-sm border border-outline-variant/20">
+          <p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Profit (24h)</p>
+          <p class="font-headline text-lg font-bold text-primary">+$4,210.80</p>
+        </div>
+        <div class="p-4 bg-surface-container-low rounded-xl shadow-sm border border-outline-variant/20">
+          <p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Available Cash</p>
+          <p class="font-headline text-lg font-bold text-on-surface">$12,044.22</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio Chart -->
+  <section class="mb-12">
+    <div class="bg-surface-container-low rounded-2xl p-7 shadow-sm border border-outline-variant/20">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="font-headline text-xl font-semibold">Portfolio Growth</h3>
+        <div class="flex gap-2 bg-surface-container-high p-1 rounded-lg" id="portfolio-time-btns">
+          <button onclick="updatePortfolioChart('1W',this)" class="px-4 py-1.5 text-xs font-medium rounded-md text-on-surface-variant">1W</button>
+          <button onclick="updatePortfolioChart('1M',this)" class="px-4 py-1.5 text-xs font-medium rounded-md gold-gradient text-on-primary shadow-md">1M</button>
+          <button onclick="updatePortfolioChart('1Y',this)" class="px-4 py-1.5 text-xs font-medium rounded-md text-on-surface-variant">1Y</button>
+          <button onclick="updatePortfolioChart('ALL',this)" class="px-4 py-1.5 text-xs font-medium rounded-md text-on-surface-variant">ALL</button>
+        </div>
+      </div>
+      <canvas id="portfolioChart" height="160"></canvas>
+    </div>
+  </section>
+
+  <!-- Assets -->
+  <section>
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="font-headline text-2xl font-bold">Your Assets</h3>
+      <button class="text-primary text-sm font-semibold flex items-center gap-1 group">
+        View Analytics <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">chevron_right</span>
+      </button>
+    </div>
+    <div class="space-y-3">
+      <div class="group bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-2xl p-5 flex items-center gap-4 cursor-pointer shadow-sm border border-outline-variant/20">
+        <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary">token</span>
+        </div>
+        <div class="flex-1">
+          <p class="font-headline font-bold text-on-surface">Bitcoin</p>
+          <p class="text-sm text-on-surface-variant">BTC • 4.128 BTC</p>
+        </div>
+        <div class="text-right hidden sm:block px-6">
+          <p class="text-xs text-on-surface-variant mb-1 uppercase tracking-tighter">Market Price</p>
+          <p class="font-medium text-on-surface">$64,210.45</p>
+        </div>
+        <div class="text-right">
+          <p class="font-headline font-bold text-on-surface">$265,042.12</p>
+          <p class="text-sm text-primary font-medium">+$12,410.00</p>
+        </div>
+      </div>
+      <div class="group bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-2xl p-5 flex items-center gap-4 cursor-pointer shadow-sm border border-outline-variant/20">
+        <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center">
+          <span class="material-symbols-outlined text-secondary">diamond</span>
+        </div>
+        <div class="flex-1">
+          <p class="font-headline font-bold text-on-surface">Ethereum</p>
+          <p class="text-sm text-on-surface-variant">ETH • 42.10 ETH</p>
+        </div>
+        <div class="text-right hidden sm:block px-6">
+          <p class="text-xs text-on-surface-variant mb-1 uppercase tracking-tighter">Market Price</p>
+          <p class="font-medium text-on-surface">$3,450.80</p>
+        </div>
+        <div class="text-right">
+          <p class="font-headline font-bold text-on-surface">$145,278.68</p>
+          <p class="text-sm text-primary font-medium">+$8,122.30</p>
+        </div>
+      </div>
+      <div class="group bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-2xl p-5 flex items-center gap-4 cursor-pointer shadow-sm border border-outline-variant/20">
+        <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center">
+          <span class="material-symbols-outlined text-tertiary">account_balance</span>
+        </div>
+        <div class="flex-1">
+          <p class="font-headline font-bold text-on-surface">S&P 500 Index</p>
+          <p class="text-sm text-on-surface-variant">VOO • 410 Shares</p>
+        </div>
+        <div class="text-right hidden sm:block px-6">
+          <p class="text-xs text-on-surface-variant mb-1 uppercase tracking-tighter">Market Price</p>
+          <p class="font-medium text-on-surface">$428.14</p>
+        </div>
+        <div class="text-right">
+          <p class="font-headline font-bold text-on-surface">$175,537.40</p>
+          <p class="text-sm text-primary font-medium">+$4,290.10</p>
+        </div>
+      </div>
+      <div class="group bg-surface-container-low hover:bg-surface-container-high transition-all duration-300 rounded-2xl p-5 flex items-center gap-4 cursor-pointer shadow-sm border border-outline-variant/20">
+        <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center">
+          <span class="material-symbols-outlined text-outline">payments</span>
+        </div>
+        <div class="flex-1">
+          <p class="font-headline font-bold text-on-surface">US Dollar</p>
+          <p class="text-sm text-on-surface-variant">USD • Cash Balance</p>
+        </div>
+        <div class="text-right hidden sm:block px-6">
+          <p class="text-xs text-on-surface-variant mb-1 uppercase tracking-tighter">Interest</p>
+          <p class="font-medium text-on-surface">4.5% APY</p>
+        </div>
+        <div class="text-right">
+          <p class="font-headline font-bold text-on-surface">$12,044.22</p>
+          <p class="text-sm text-on-surface-variant font-medium">Settled</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-16 flex flex-col items-center pb-4">
+    <div class="w-14 h-14 rounded-full bg-surface-container-low border border-outline-variant/30 flex items-center justify-center mb-4 shadow-sm">
+      <span class="material-symbols-outlined text-primary text-3xl">verified_user</span>
+    </div>
+    <p class="text-on-surface-variant text-center max-w-sm text-sm">Your portfolio is protected with bank-grade 256-bit encryption and multi-sig cold storage protocols.</p>
+  </section>
+</div>
+
+<!-- Profile Page -->
+<div id="page-profile" class="page pt-24 pb-28 px-5 max-w-5xl mx-auto">
+  <!-- Hero -->
+  <div class="flex flex-col items-center pt-8 pb-12">
+    <div class="relative mb-5">
+      <div class="w-24 h-24 rounded-full gold-gradient flex items-center justify-center shadow-xl shadow-primary/20">
+        <span class="material-symbols-outlined text-on-primary text-5xl">person</span>
+      </div>
+      <div class="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center shadow-sm">
+        <span class="material-symbols-outlined text-primary text-sm">edit</span>
+      </div>
+    </div>
+    <h2 class="font-headline text-2xl font-bold text-on-surface">Julian Reyes</h2>
+    <p class="text-on-surface-variant text-sm mt-1">Private Client · Member since 2021</p>
+    <div class="flex gap-3 mt-5">
+      <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+        <span class="material-symbols-outlined text-sm">verified</span> Verified
+      </span>
+      <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant text-xs font-semibold border border-outline-variant/30">
+        <span class="material-symbols-outlined text-sm">star</span> Gold Tier
+      </span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-3 gap-4 mb-10">
+    <div class="bg-surface-container-low rounded-xl p-4 text-center shadow-sm border border-outline-variant/20">
+      <p class="font-headline font-bold text-xl text-on-surface">4</p>
+      <p class="text-xs text-on-surface-variant mt-1">Assets</p>
+    </div>
+    <div class="bg-surface-container-low rounded-xl p-4 text-center shadow-sm border border-outline-variant/20">
+      <p class="font-headline font-bold text-xl text-primary">+12.4%</p>
+      <p class="text-xs text-on-surface-variant mt-1">Returns</p>
+    </div>
+    <div class="bg-surface-container-low rounded-xl p-4 text-center shadow-sm border border-outline-variant/20">
+      <p class="font-headline font-bold text-xl text-on-surface">248</p>
+      <p class="text-xs text-on-surface-variant mt-1">Trades</p>
+    </div>
+  </div>
+
+  <!-- Settings List -->
+  <div class="space-y-2">
+    <p class="text-xs font-label uppercase tracking-widest text-on-surface-variant px-2 mb-3">Account</p>
+    <div class="bg-surface-container-low rounded-xl divide-y divide-outline-variant/30 shadow-sm border border-outline-variant/20">
+      <div class="flex items-center justify-between p-5 cursor-pointer hover:bg-surface-container transition-colors rounded-t-xl">
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined text-primary">notifications</span>
+          <span class="text-sm text-on-surface">Notifications</span>
+        </div>
+        <span class="material-symbols-outlined text-on-surface-variant text-lg">chevron_right</span>
+      </div>
+      <div class="flex items-center justify-between p-5 cursor-pointer hover:bg-surface-container transition-colors">
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined text-primary">security</span>
+          <span class="text-sm text-on-surface">Security & 2FA</span>
+        </div>
+        <span class="material-symbols-outlined text-on-surface-variant text-lg">chevron_right</span>
+      </div>
+      <div class="flex items-center justify-between p-5 cursor-pointer hover:bg-surface-container transition-colors">
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined text-primary">account_balance</span>
+          <span class="text-sm text-on-surface">Linked Bank Accounts</span>
+        </div>
+        <span class="material-symbols-outlined text-on-surface-variant text-lg">chevron_right</span>
+      </div>
+      <div class="flex items-center justify-between p-5 cursor-pointer hover:bg-surface-container transition-colors rounded-b-xl">
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined text-primary">receipt_long</span>
+          <span class="text-sm text-on-surface">Statements & Tax Docs</span>
+        </div>
+        <span class="material-symbols-outlined text-on-surface-variant text-lg">chevron_right</span>
+      </div>
+    </div>
+
+    <p class="text-xs font-label uppercase tracking-widest text-on-surface-variant px-2 mt-6 mb-3">Preferences</p>
+    <div class="bg-surface-container-low rounded-xl divide-y divide-outline-variant/30 shadow-sm border border-outline-variant/20">
+      <div class="flex items-center justify-between p-5 cursor-pointer hover:bg-surface-container transition-colors rounded-t-xl">
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined text-primary">language</span>
+          <span class="text-sm text-on-surface">Language & Region</span>
+        </div>
+        <span class="text-xs text-on-surface-variant">English</span>
+      </div>
+      <div class="flex items-center justify-between p-5 cursor-pointer hover:bg-surface-container transition-colors rounded-b-xl">
+        <div class="flex items-center gap-4">
+          <span class="material-symbols-outlined text-primary">light_mode</span>
+          <span class="text-sm text-on-surface">Appearance</span>
+        </div>
+        <span class="text-xs text-on-surface-variant">Light</span>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <button class="w-full py-4 rounded-xl border border-error/30 text-error text-sm font-semibold hover:bg-error/5 transition-colors flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-lg">logout</span> Sign Out
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-surface-container-low/95 backdrop-blur-xl border-t border-outline-variant/30 px-4 h-20 flex items-center justify-around shadow-[0_-1px_12px_rgba(0,0,0,0.06)]">
+  <button class="nav-btn active flex flex-col items-center gap-1" onclick="navigate('home')" id="nav-home">
+    <span class="material-symbols-outlined text-2xl nav-icon" style="font-variation-settings:'FILL' 1">home</span>
+    <span class="text-[10px] font-label uppercase tracking-tighter nav-label">Home</span>
+  </button>
+  <button class="nav-btn flex flex-col items-center gap-1" onclick="navigate('market')" id="nav-market">
+    <span class="material-symbols-outlined text-2xl nav-icon">monitoring</span>
+    <span class="text-[10px] font-label uppercase tracking-tighter nav-label">Market</span>
+  </button>
+  <div class="relative -top-6" onclick="navigate('trade')">
+    <div class="gold-gradient w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-primary/30 cursor-pointer hover:brightness-110 transition-all">
+      <span class="material-symbols-outlined text-on-primary text-3xl">swap_horizontal_circle</span>
+    </div>
+    <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-label uppercase tracking-tighter text-on-surface-variant">Trade</span>
+  </div>
+  <button class="nav-btn flex flex-col items-center gap-1" onclick="navigate('portfolio')" id="nav-portfolio">
+    <span class="material-symbols-outlined text-2xl nav-icon">account_balance_wallet</span>
+    <span class="text-[10px] font-label uppercase tracking-tighter nav-label">Portfolio</span>
+  </button>
+  <button class="nav-btn flex flex-col items-center gap-1" onclick="navigate('profile')" id="nav-profile">
+    <span class="material-symbols-outlined text-2xl nav-icon">person</span>
+    <span class="text-[10px] font-label uppercase tracking-tighter nav-label">Profile</span>
+  </button>
+</nav>
+
+<script>
+// ─── Chart.js defaults ───────────────────────────────────────────
+Chart.defaults.color = '#4e4637';
+Chart.defaults.borderColor = 'rgba(209,196,176,0.4)';
+Chart.defaults.font.family = 'Inter';
+
+const GOLD = '#c5a059';
+const GOLD2 = '#775a19';
+
+function goldGradient(ctx, chartArea) {
+  const g = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+  g.addColorStop(0, 'rgba(197,160,89,0.18)');
+  g.addColorStop(1, 'rgba(197,160,89,0)');
+  return g;
+}
+
+// Generate realistic price series
+function priceWalk(start, steps, volatility=1) {
+  const d=[start];
+  for(let i=1;i<steps;i++){
+    d.push(Math.max(d[i-1]*(1+(Math.random()-.47)*volatility*.02), start*.7));
+  }
+  return d;
+}
+
+function genLabels(n, unit='day') {
+  const now=new Date(), out=[];
+  for(let i=n-1;i>=0;i--) {
+    const d=new Date(now);
+    if(unit==='day') d.setDate(d.getDate()-i);
+    else if(unit==='hour') d.setHours(d.getHours()-i);
+    else if(unit==='month') d.setMonth(d.getMonth()-i);
+    out.push(unit==='hour'?d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):
+      unit==='month'?d.toLocaleDateString([],{month:'short',year:'2-digit'}):
+      d.toLocaleDateString([],{month:'short',day:'numeric'}));
+  }
+  return out;
+}
+
+// ─── HOME CHART ───────────────────────────────────────────────────
+const homeCtx = document.getElementById('homeChart').getContext('2d');
+let homeChart = new Chart(homeCtx,{
+  type:'line',
+  data:{
+    labels: genLabels(30,'day'),
+    datasets:[{
+      data: priceWalk(2600000,30,0.8),
+      borderColor: GOLD,
+      borderWidth: 2,
+      fill: true,
+      backgroundColor: function(ctx){
+        const c=ctx.chart; if(!c.chartArea) return 'transparent';
+        return goldGradient(c.ctx, c.chartArea);
+      },
+      tension:.4, pointRadius:0, pointHoverRadius:5,
+      pointHoverBackgroundColor: GOLD
+    }]
+  },
+  options:{
+    animation:{duration:1200,easing:'easeInOutQuart'},
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{
+      mode:'index',intersect:false,
+      callbacks:{label:v=>'$'+v.raw.toLocaleString('en-US',{maximumFractionDigits:0})}
+    }},
+    scales:{x:{display:false},y:{display:false}}
+  }
+});
+
+// ─── MARKET CHART ────────────────────────────────────────────────
+const sp500Data = priceWalk(5200,90,0.6);
+const mktCtx = document.getElementById('marketChart').getContext('2d');
+let marketChart = new Chart(mktCtx,{
+  type:'line',
+  data:{
+    labels: genLabels(90,'day'),
+    datasets:[{
+      label:'S&P 500',
+      data: sp500Data,
+      borderColor: GOLD, borderWidth: 2,
+      fill:true,
+      backgroundColor:function(ctx){
+        const c=ctx.chart; if(!c.chartArea) return 'transparent';
+        return goldGradient(c.ctx,c.chartArea);
+      },
+      tension:.4, pointRadius:0, pointHoverRadius:4,
+      pointHoverBackgroundColor:GOLD
+    }]
+  },
+  options:{
+    animation:{duration:1000,easing:'easeInOutCubic'},
+    responsive:true, maintainAspectRatio:true,
+    plugins:{legend:{display:false},tooltip:{
+      mode:'index',intersect:false,
+      callbacks:{label:v=>v.raw.toLocaleString('en-US',{minimumFractionDigits:2})}
+    }},
+    scales:{
+      x:{grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0}},
+      y:{grid:{color:'rgba(209,196,176,0.3)'},ticks:{callback:v=>v.toLocaleString()}}
+    }
+  }
+});
+
+// ─── WATCHLIST ───────────────────────────────────────────────────
+const assets=[
+  {sym:'AAPL',name:'Apple Inc.',price:172.62,chg:0.45,data:priceWalk(170,30,0.8)},
+  {sym:'VOO',name:'Vanguard S&P 500 ETF',price:481.12,chg:1.12,data:priceWalk(475,30,0.5)},
+  {sym:'NVDA',name:'NVIDIA Corporation',price:894.52,chg:2.48,data:priceWalk(870,30,1.2)},
+  {sym:'TSLA',name:'Tesla, Inc.',price:175.22,chg:-0.12,data:priceWalk(178,30,1.5)},
+  {sym:'MSFT',name:'Microsoft Corporation',price:420.72,chg:0.92,data:priceWalk(415,30,0.6)}
+];
+const wl=document.getElementById('watchlist-items');
+assets.forEach(a=>{
+  const pos=a.chg>=0;
+  const color=pos?'#775a19':'#6c5e3e';
+  const bg=pos?'rgba(119,90,25,0.1)':'rgba(108,94,62,0.15)';
+  const id='spark-'+a.sym;
+  wl.innerHTML+=`
+  <div class="group grid grid-cols-12 gap-4 items-center bg-surface-container-lowest hover:bg-surface-container-low p-5 md:px-5 md:py-3.5 rounded-xl transition-colors cursor-pointer border border-outline-variant/20">
+    <div class="col-span-8 md:col-span-4 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+        <span class="material-symbols-outlined text-primary text-lg">show_chart</span>
+      </div>
+      <div><div class="font-bold text-sm text-on-surface">${a.sym}</div><div class="text-xs text-on-surface-variant">${a.name}</div></div>
+    </div>
+    <div class="hidden md:block col-span-3"><canvas id="${id}" height="32"></canvas></div>
+    <div class="col-span-4 md:col-span-3 text-right">
+      <div class="font-headline font-bold text-on-surface">$${a.price.toFixed(2)}</div>
+      <div class="md:hidden text-xs" style="color:${color}">${a.chg>=0?'+':''}${a.chg}%</div>
+    </div>
+    <div class="hidden md:block col-span-2 text-right">
+      <span class="px-3 py-1 rounded-full text-xs font-semibold" style="background:${bg};color:${color}">${a.chg>=0?'+':''}${a.chg}%</span>
+    </div>
+  </div>`;
+});
+// Draw sparklines after DOM ready
+setTimeout(()=>{
+  assets.forEach(a=>{
+    const el=document.getElementById('spark-'+a.sym);
+    if(!el) return;
+    const pos=a.chg>=0;
+    new Chart(el,{
+      type:'line',
+      data:{labels:a.data.map((_,i)=>i),datasets:[{data:a.data,borderColor:pos?GOLD:'#6c5e3e',borderWidth:1.5,fill:false,tension:.4,pointRadius:0}]},
+      options:{animation:{duration:800},responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}
+    });
+  });
+},100);
+
+// ─── TRADE CHART ─────────────────────────────────────────────────
+const tradeDataSets={
+  '1D':{labels:genLabels(48,'hour'),data:priceWalk(192,48,0.5)},
+  '1W':{labels:genLabels(7,'day'),data:priceWalk(185,7,1)},
+  '1M':{labels:genLabels(30,'day'),data:priceWalk(178,30,0.8)},
+  '1Y':{labels:genLabels(12,'month'),data:priceWalk(150,12,1.2)}
+};
+const trCtx=document.getElementById('tradeChart').getContext('2d');
+let tradeChart=new Chart(trCtx,{
+  type:'line',
+  data:{
+    labels:tradeDataSets['1D'].labels,
+    datasets:[{
+      label:'AAPL',data:tradeDataSets['1D'].data,
+      borderColor:GOLD,borderWidth:2.5,fill:true,
+      backgroundColor:function(ctx){const c=ctx.chart;if(!c.chartArea)return 'transparent';return goldGradient(c.ctx,c.chartArea);},
+      tension:.4,pointRadius:0,pointHoverRadius:5,pointHoverBackgroundColor:GOLD,
+      pointHoverBorderColor:'#fdf8f0',pointHoverBorderWidth:2
+    }]
+  },
+  options:{
+    animation:{duration:900,easing:'easeInOutQuart'},
+    responsive:true,maintainAspectRatio:true,
+    plugins:{legend:{display:false},tooltip:{
+      mode:'index',intersect:false,
+      callbacks:{label:v=>'$'+v.raw.toFixed(2)}
+    }},
+    scales:{
+      x:{grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0}},
+      y:{position:'right',grid:{color:'rgba(209,196,176,0.3)'},ticks:{callback:v=>'$'+v.toFixed(0)}}
+    }
+  }
+});
+function updateTradeChart(range,btn){
+  const ds=tradeDataSets[range];
+  tradeChart.data.labels=ds.labels;
+  tradeChart.data.datasets[0].data=ds.data;
+  tradeChart.update();
+  document.querySelectorAll('#trade-time-btns button').forEach(b=>{
+    b.className='px-4 py-1.5 rounded-full text-xs font-semibold text-on-surface-variant';
+  });
+  btn.className='px-4 py-1.5 rounded-full text-xs font-semibold bg-surface-container-lowest text-primary shadow-sm';
+}
+
+// ─── PORTFOLIO CHART ─────────────────────────────────────────────
+const portDataSets={
+  '1W':{labels:genLabels(7,'day'),data:priceWalk(820000,7,0.6)},
+  '1M':{labels:genLabels(30,'day'),data:priceWalk(740000,30,1)},
+  '1Y':{labels:genLabels(12,'month'),data:priceWalk(600000,12,1.5)},
+  'ALL':{labels:genLabels(24,'month'),data:priceWalk(400000,24,1.8)}
+};
+const pfCtx=document.getElementById('portfolioChart').getContext('2d');
+let portfolioChart=new Chart(pfCtx,{
+  type:'line',
+  data:{
+    labels:portDataSets['1M'].labels,
+    datasets:[{
+      label:'Net Worth',data:portDataSets['1M'].data,
+      borderColor:GOLD,borderWidth:2.5,fill:true,
+      backgroundColor:function(ctx){const c=ctx.chart;if(!c.chartArea)return 'transparent';return goldGradient(c.ctx,c.chartArea);},
+      tension:.45,pointRadius:0,pointHoverRadius:5,pointHoverBackgroundColor:GOLD
+    }]
+  },
+  options:{
+    animation:{duration:1000,easing:'easeInOutQuart'},
+    responsive:true,maintainAspectRatio:true,
+    plugins:{legend:{display:false},tooltip:{
+      mode:'index',intersect:false,
+      callbacks:{label:v=>'$'+v.raw.toLocaleString('en-US',{maximumFractionDigits:0})}
+    }},
+    scales:{
+      x:{grid:{display:false},ticks:{maxTicksLimit:6,maxRotation:0}},
+      y:{grid:{color:'rgba(209,196,176,0.3)'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'}}
+    }
+  }
+});
+function updatePortfolioChart(range,btn){
+  const ds=portDataSets[range];
+  portfolioChart.data.labels=ds.labels;
+  portfolioChart.data.datasets[0].data=ds.data;
+  portfolioChart.update();
+  document.querySelectorAll('#portfolio-time-btns button').forEach(b=>{
+    b.className='px-4 py-1.5 text-xs font-medium rounded-md text-on-surface-variant';
+  });
+  btn.className='px-4 py-1.5 text-xs font-medium rounded-md gold-gradient text-on-primary shadow-md';
+}
+
+// ─── SPA NAVIGATION ──────────────────────────────────────────────
+let currentPage='home';
+function navigate(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const nb=document.getElementById('nav-'+page);
+  if(nb) nb.classList.add('active');
+  currentPage=page;
+  window.scrollTo({top:0,behavior:'smooth'});
+  // Re-render charts when page becomes visible
+  if(page==='trade') tradeChart.resize();
+  if(page==='portfolio') portfolioChart.resize();
+  if(page==='market') marketChart.resize();
+}
+
+// ─── OFFCANVAS MENU ──────────────────────────────────────────────
+function openMenu(){
+  document.getElementById('offcanvas').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMenu(){
+  document.getElementById('offcanvas').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ─── LIVE TICKER ─────────────────────────────────────────────────
+const tickerAssets=[
+  {sym:'AAPL',price:172.62,chg:'+0.45%'},
+  {sym:'NVDA',price:894.52,chg:'+2.48%'},
+  {sym:'MSFT',price:420.72,chg:'+0.92%'},
+  {sym:'TSLA',price:175.22,chg:'-0.12%'},
+  {sym:'VOO', price:481.12,chg:'+1.12%'},
+  {sym:'BTC', price:64210,chg:'+1.84%'},
+  {sym:'ETH', price:3450.8,chg:'+0.72%'},
+  {sym:'SPX', price:5241.53,chg:'+1.24%'},
+  {sym:'NDX', price:18307.98,chg:'+0.85%'},
+  {sym:'GLD', price:2318.40,chg:'+0.63%'}
+];
+function buildTicker(){
+  const t=document.getElementById('ticker');
+  let html='';
+  [...tickerAssets,...tickerAssets].forEach(a=>{
+    const pos=a.chg.startsWith('+');
+    html+=`<span class="flex items-center gap-1.5 mr-8 shrink-0"><span class="text-on-surface font-semibold">${a.sym}</span><span class="text-on-surface-variant">$${a.price.toLocaleString()}</span><span style="color:${pos?'#775a19':'#6c5e3e'}">${a.chg}</span></span>`;
+  });
+  t.innerHTML=html;
+}
+buildTicker();
+
+// ─── LIVE PRICE UPDATES ──────────────────────────────────────────
+function nudge(v,pct){return v*(1+(Math.random()-.5)*pct);}
+setInterval(()=>{
+  const d=homeChart.data.datasets[0].data;
+  d.push(nudge(d[d.length-1],.01));
+  d.shift();
+  homeChart.update('none');
+},3000);
+
+// ─── SERVICE WORKER REGISTRATION ────────────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      .then(reg => {
+        console.log('[PWA] Service worker registered, scope:', reg.scope);
+        setInterval(() => reg.update(), 60000);
+      })
+      .catch(err => console.warn('[PWA] SW registration failed:', err));
+  });
+}
+
+// ─── HASH-BASED DEEP LINKING (shortcuts support) ─────────────────
+function handleHash() {
+  const hash = location.hash.replace('#', '');
+  const pages = ['home', 'market', 'trade', 'portfolio', 'profile'];
+  if (pages.includes(hash)) navigate(hash);
+}
+window.addEventListener('hashchange', handleHash);
+window.addEventListener('DOMContentLoaded', handleHash);
+
+// ─── INSTALL PROMPT BANNER ────────────────────────────────────────
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallBanner();
+});
+
+function showInstallBanner() {
+  if (document.getElementById('install-banner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'install-banner';
+  banner.style.cssText = 'position:fixed;bottom:88px;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:12px;padding:12px 18px;background:rgba(247,241,232,0.97);backdrop-filter:blur(20px);border:1px solid rgba(197,160,89,0.35);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.1);white-space:nowrap;animation:fadeIn .3s ease';
+  banner.innerHTML = `
+    <img src="assets/img/logo.png" style="width:28px;height:28px;object-fit:contain;border-radius:6px" />
+    <div style="flex:1">
+      <p style="font-family:Manrope,sans-serif;font-size:13px;font-weight:700;color:#1c1b17;margin:0">Install POZNAIME</p>
+      <p style="font-size:11px;color:#7f7260;margin:0">Add to home screen for full experience</p>
+    </div>
+    <button onclick="installPWA()" style="background:linear-gradient(135deg,#e9c176,#c5a059);border:none;color:#412d00;font-family:Inter,sans-serif;font-size:11px;font-weight:700;padding:8px 14px;border-radius:20px;cursor:pointer;text-transform:uppercase;letter-spacing:.05em">Install</button>
+    <button onclick="document.getElementById('install-banner').remove()" style="background:none;border:none;color:#7f7260;cursor:pointer;font-size:18px;line-height:1;padding:2px 4px">&times;</button>
+  `;
+  document.body.appendChild(banner);
+}
+
+async function installPWA() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  console.log('[PWA] Install outcome:', outcome);
+  deferredPrompt = null;
+  const b = document.getElementById('install-banner');
+  if (b) b.remove();
+}
+
+window.addEventListener('appinstalled', () => {
+  console.log('[PWA] App installed successfully');
+  const b = document.getElementById('install-banner');
+  if (b) b.remove();
+});
+</script>
+</body>
+</html>

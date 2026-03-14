@@ -1,0 +1,44 @@
+{
+  "name": "POZNAIME – Private Client Platform",
+  "short_name": "POZNAIME",
+  "description": "Premium private investment platform for portfolio management, trading, and market insights.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#131314",
+  "theme_color": "#131314",
+  "lang": "en",
+  "categories": ["finance", "business"],
+  "icons": [
+    {
+      "src": "assets/img/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Market",
+      "short_name": "Market",
+      "description": "View live market data",
+      "url": "/#market",
+      "icons": [{ "src": "assets/img/logo.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Trade",
+      "short_name": "Trade",
+      "description": "Execute a trade",
+      "url": "/#trade",
+      "icons": [{ "src": "assets/img/logo.png", "sizes": "96x96" }]
+    }
+  ]
+}
