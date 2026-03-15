@@ -197,7 +197,7 @@ tailwind.config={
 <!-- ==============================================
      DISCOVER / HOME PAGE
 =============================================== -->
-<div id="page-home" class="page active pt-20 px-4 md:px-6 max-w-3xl mx-auto space-y-8">
+<div id="page-home" class="page active pt-20 px-4 md:px-6 max-w-3xl mx-auto space-y-12">
 
   <!-- Search -->
   <div class="relative">
@@ -551,7 +551,7 @@ tailwind.config={
     <div id="btn-trade-no" class="no-bg-tint rounded-card p-4 transition-all card-touch" :class="currentTradeSide === 'no' ? 'selected' : ''" @click="currentTradeSide = 'no'">
       <div class="trade-card-header">
         <div class="trade-card-probability text-no">NO 37%</div>
-        <div class="trade-card-payout" x-text="'€' + tradeAmount + ' → €' + (tradeAmount / noProb).toFixed(2)">€10 → €27.02</div>
+        <div class="trade-card-payout" x-text="'€' + tradeAmount + ' → €' + (tradeAmount / noProb).toFixed(2)">€10 → €27.03</div>
       </div>
       <p class="text-[11px] font-medium text-textMain mb-3 h-8">If Bulgaria does NOT adopt</p>
       <div class="trade-card-loss" x-text="'Max loss €' + parseFloat(tradeAmount).toFixed(2)">Max loss €10</div>
