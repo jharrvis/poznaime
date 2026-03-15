@@ -3,8 +3,8 @@
    Requires: Alpine.js, Chart.js, TailwindCSS
 ============================================ */
 
-function appState() {
-  return {
+document.addEventListener('alpine:init', () => {
+  Alpine.data('appState', () => ({
     // --- Navigation ---
     currentPage: 'home',
 
@@ -321,5 +321,5 @@ function appState() {
       toast.className = 'toast show' + (type ? ' ' + type : '');
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
-  };
-}
+  }));
+});
