@@ -223,7 +223,7 @@ document.addEventListener('alpine:init', () => {
         data: {
           labels: Array.from({ length: 30 }, (_, i) => i + 1),
           datasets: [{
-            data: this.generateChartData(30, 45, 70),
+            data: this.generateChartData(30, 25, 88),
             borderColor: '#16A34A',
             backgroundColor: gradient,
             borderWidth: 2,
@@ -282,9 +282,9 @@ document.addEventListener('alpine:init', () => {
 
       let points, min, max;
       switch (timeframe) {
-        case '24h': points = 24; min = 55; max = 68; break;
-        case '7d':  points = 14; min = 50; max = 70; break;
-        default:    points = 30; min = 45; max = 70;
+        case '24h': points = 24; min = 50; max = 78; break;
+        case '7d':  points = 14; min = 40; max = 82; break;
+        default:    points = 30; min = 25; max = 88;
       }
 
       const newData = this.generateChartData(points, min, max);
@@ -292,10 +292,10 @@ document.addEventListener('alpine:init', () => {
       this.marketChartObj.data.datasets[0].data = newData;
       this.marketChartObj.update('active');
 
-      // Sync Alpine state — all bound elements update automatically
+      // yesProb is the single source of truth; noProb is always its complement
       const last = newData[newData.length - 1];
       this.yesProb = last / 100;
-      this.noProb  = parseFloat((1 - this.yesProb).toFixed(2));
+      this.noProb  = Math.round((1 - this.yesProb) * 100) / 100;
     },
 
     // ============================================
@@ -307,7 +307,7 @@ document.addEventListener('alpine:init', () => {
         if (this.marketChartObj) {
           const data     = this.marketChartObj.data.datasets[0].data;
           const last     = data[data.length - 1];
-          const newValue = Math.max(40, Math.min(75, last + (Math.random() - 0.5) * 2));
+          const newValue = Math.max(10, Math.min(90, last + (Math.random() - 0.5) * 4));
           const rounded  = Math.round(newValue);
           data.push(rounded);
           data.shift();
@@ -316,9 +316,9 @@ document.addEventListener('alpine:init', () => {
             this.marketChartObj.update('none');
           }
 
-          // Update Alpine state — all bound elements update automatically
+          // yesProb is the single source of truth; noProb is always its complement
           this.yesProb = rounded / 100;
-          this.noProb  = parseFloat((1 - this.yesProb).toFixed(2));
+          this.noProb  = Math.round((1 - this.yesProb) * 100) / 100;
         }
 
         // Fluctuate volume and trader count
