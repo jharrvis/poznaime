@@ -37,6 +37,11 @@ document.addEventListener('alpine:init', () => {
     searchResults: [],
     activeCategory: 'all',
 
+    // --- Live market data ---
+    volume: 420582,
+    volume24h: 32145,
+    traderCount: 1248,
+
     // --- Chart ---
     marketChartObj: null,
 
@@ -287,10 +292,10 @@ document.addEventListener('alpine:init', () => {
       this.marketChartObj.data.datasets[0].data = newData;
       this.marketChartObj.update('active');
 
-      // Sync displayed percentages
+      // Sync Alpine state — all bound elements update automatically
       const last = newData[newData.length - 1];
-      document.getElementById('market-yes-percent').textContent = last + '%';
-      document.getElementById('market-no-percent').textContent  = (100 - last) + '%';
+      this.yesProb = last / 100;
+      this.noProb  = parseFloat((1 - this.yesProb).toFixed(2));
     },
 
     // ============================================
@@ -298,17 +303,28 @@ document.addEventListener('alpine:init', () => {
     // ============================================
     simulateLiveUpdates() {
       setInterval(() => {
-        if (this.marketChartObj && document.getElementById('page-market').classList.contains('active')) {
+        // Update chart and probabilities
+        if (this.marketChartObj) {
           const data     = this.marketChartObj.data.datasets[0].data;
           const last     = data[data.length - 1];
           const newValue = Math.max(40, Math.min(75, last + (Math.random() - 0.5) * 2));
           const rounded  = Math.round(newValue);
           data.push(rounded);
           data.shift();
-          this.marketChartObj.update('none');
-          document.getElementById('market-yes-percent').textContent = rounded + '%';
-          document.getElementById('market-no-percent').textContent  = (100 - rounded) + '%';
+
+          if (document.getElementById('page-market').classList.contains('active')) {
+            this.marketChartObj.update('none');
+          }
+
+          // Update Alpine state — all bound elements update automatically
+          this.yesProb = rounded / 100;
+          this.noProb  = parseFloat((1 - this.yesProb).toFixed(2));
         }
+
+        // Fluctuate volume and trader count
+        this.volume     = Math.max(400000, this.volume + Math.floor((Math.random() - 0.3) * 600));
+        this.volume24h  = Math.max(25000,  this.volume24h + Math.floor((Math.random() - 0.3) * 250));
+        this.traderCount = Math.max(1200,  this.traderCount + Math.floor((Math.random() - 0.4) * 4));
       }, 5000);
     },
 

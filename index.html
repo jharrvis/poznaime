@@ -256,12 +256,12 @@ tailwind.config={
 
         <div class="probability-bar flex gap-4 mb-4">
           <div class="flex-1 flex flex-col items-center">
-            <span class="probability-value font-bold text-[32px]">63%</span>
+            <span class="probability-value font-bold text-[32px]" x-text="Math.round(yesProb * 100) + '%'">63%</span>
             <span class="text-xs opacity-70">YES</span>
           </div>
           <div class="w-px bg-white/20"></div>
           <div class="flex-1 flex flex-col items-center">
-            <span class="probability-value font-bold text-[32px]">37%</span>
+            <span class="probability-value font-bold text-[32px]" x-text="Math.round(noProb * 100) + '%'">37%</span>
             <span class="text-xs opacity-70">NO</span>
           </div>
         </div>
@@ -269,7 +269,7 @@ tailwind.config={
         <div class="trade-preview flex items-center gap-2 mb-4">
           <span class="font-medium text-sm">Invest €10</span>
           <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-          <span class="win-amount font-bold text-sm">Win €15.87</span>
+          <span class="win-amount font-bold text-sm" x-text="'Win €' + (10 / yesProb).toFixed(2)">Win €15.87</span>
         </div>
 
         <div class="event-meta grid grid-cols-3 gap-2 text-xs border-t pt-4 mb-4">
@@ -385,15 +385,15 @@ tailwind.config={
     <h1 class="text-[28px] font-bold text-textMain leading-tight mb-3">Will Bulgaria adopt the Euro before Jan 1, 2026?</h1>
     <div class="flex gap-4 text-sm text-textMuted">
       <span>Closes in 12 days</span>
-      <span>Volume €420K</span>
+      <span x-text="'Volume €' + Math.round(volume / 1000) + 'K'">Volume €420K</span>
     </div>
   </div>
 
   <!-- Probability Block -->
   <div class="bg-card rounded-card p-6 shadow-soft border border-border text-center">
     <div class="flex justify-center gap-8 mb-2">
-      <div class="text-center"><div class="text-yes font-bold text-[36px]" id="market-yes-percent">63%</div><div class="text-sm font-semibold">YES</div></div>
-      <div class="text-center"><div class="text-no font-bold text-[36px]" id="market-no-percent">37%</div><div class="text-sm font-semibold">NO</div></div>
+      <div class="text-center"><div class="text-yes font-bold text-[36px]" id="market-yes-percent" x-text="Math.round(yesProb * 100) + '%'">63%</div><div class="text-sm font-semibold">YES</div></div>
+      <div class="text-center"><div class="text-no font-bold text-[36px]" id="market-no-percent" x-text="Math.round(noProb * 100) + '%'">37%</div><div class="text-sm font-semibold">NO</div></div>
     </div>
     <p class="text-xs text-textMuted mt-2">Market probability based on trader positions</p>
   </div>
@@ -427,9 +427,9 @@ tailwind.config={
 
     <div x-show="activeStatsTab === 'overview'" class="p-5 space-y-4">
       <div class="grid grid-cols-2 gap-4">
-        <div class="bg-bg rounded-lg p-3"><div class="text-xs text-textMuted mb-1">Total Volume</div><div class="text-xl font-bold">€420,582</div></div>
-        <div class="bg-bg rounded-lg p-3"><div class="text-xs text-textMuted mb-1">24h Volume</div><div class="text-xl font-bold">€32,145</div></div>
-        <div class="bg-bg rounded-lg p-3"><div class="text-xs text-textMuted mb-1">Traders</div><div class="text-xl font-bold">1,248</div></div>
+        <div class="bg-bg rounded-lg p-3"><div class="text-xs text-textMuted mb-1">Total Volume</div><div class="text-xl font-bold" x-text="'€' + volume.toLocaleString()">€420,582</div></div>
+        <div class="bg-bg rounded-lg p-3"><div class="text-xs text-textMuted mb-1">24h Volume</div><div class="text-xl font-bold" x-text="'€' + volume24h.toLocaleString()">€32,145</div></div>
+        <div class="bg-bg rounded-lg p-3"><div class="text-xs text-textMuted mb-1">Traders</div><div class="text-xl font-bold" x-text="traderCount.toLocaleString()">1,248</div></div>
         <div class="bg-bg rounded-lg p-3"><div class="text-xs text-textMuted mb-1">Liquidity</div><div class="text-xl font-bold text-yes">High</div></div>
       </div>
     </div>
@@ -466,15 +466,15 @@ tailwind.config={
   <!-- Trade Entry Preview (CTA only — full trade UI is on Trade page) -->
   <div class="bg-card rounded-card p-6 shadow-soft border border-border border-l-4 border-l-accent text-center">
     <h3 class="font-bold text-lg mb-2">Trade this market</h3>
-    <p class="text-sm text-textMain mb-4">Invest €10 <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Win <strong class="text-yes">€15.87</strong> if correct</p>
+    <p class="text-sm text-textMain mb-4">Invest €10 <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Win <strong class="text-yes" x-text="'€' + (10 / yesProb).toFixed(2)">€15.87</strong> if correct</p>
     <button @click="navigate('trade')" class="w-full bg-accent text-white py-3 rounded-btn font-bold text-base hover:bg-blue-700 transition-colors btn-press">Open Trade</button>
   </div>
 
   <!-- Activity stats row -->
   <div class="grid grid-cols-3 gap-2 py-4">
-    <div class="text-center"><div class="font-bold text-lg">1,248</div><div class="text-xs text-textMuted">Traders</div></div>
-    <div class="text-center"><div class="font-bold text-lg">€420K</div><div class="text-xs text-textMuted">Total Vol</div></div>
-    <div class="text-center"><div class="font-bold text-lg">€32K</div><div class="text-xs text-textMuted">Vol Today</div></div>
+    <div class="text-center"><div class="font-bold text-lg" x-text="traderCount.toLocaleString()">1,248</div><div class="text-xs text-textMuted">Traders</div></div>
+    <div class="text-center"><div class="font-bold text-lg" x-text="'€' + Math.round(volume / 1000) + 'K'">€420K</div><div class="text-xs text-textMuted">Total Vol</div></div>
+    <div class="text-center"><div class="font-bold text-lg" x-text="'€' + Math.round(volume24h / 1000) + 'K'">€32K</div><div class="text-xs text-textMuted">Vol Today</div></div>
   </div>
 
   <!-- Related Markets -->
@@ -503,11 +503,11 @@ tailwind.config={
     <div class="text-accent font-medium text-xs mb-1">Politics</div>
     <h1 class="text-[20px] font-bold text-textMain leading-tight mb-2">Will Bulgaria adopt the Euro before Jan 1, 2026?</h1>
     <div class="flex items-center gap-3">
-      <span class="font-bold text-yes text-lg">YES 63%</span>
-      <span class="font-bold text-no text-lg">NO 37%</span>
+      <span class="font-bold text-yes text-lg" x-text="'YES ' + Math.round(yesProb * 100) + '%'">YES 63%</span>
+      <span class="font-bold text-no text-lg" x-text="'NO ' + Math.round(noProb * 100) + '%'">NO 37%</span>
     </div>
     <div class="flex gap-3 text-xs text-textMuted mt-2">
-      <span>Vol €420K</span><span>Close 12d</span><span>Liquidity: High</span>
+      <span x-text="'Vol €' + Math.round(volume / 1000) + 'K'">Vol €420K</span><span>Close 12d</span><span>Liquidity: High</span>
     </div>
     <div class="mt-3 bg-blue-50 text-accent p-2.5 rounded-lg text-xs">
       <strong>Why it matters:</strong> EU Commission confirms progress on roadmap.
@@ -537,8 +537,8 @@ tailwind.config={
     <!-- YES card -->
     <div id="btn-trade-yes" class="yes-bg-tint rounded-card p-4 transition-all card-touch" :class="currentTradeSide === 'yes' ? 'selected' : ''" @click="currentTradeSide = 'yes'">
       <div class="trade-card-header">
-        <div class="trade-card-probability text-yes">YES 63%</div>
-        <div class="trade-card-payout" x-text="'€' + tradeAmount + ' → €' + (tradeAmount / yesProb).toFixed(2)">€10 → €15.87</div>
+        <div class="trade-card-probability text-yes" x-text="'YES ' + Math.round(yesProb * 100) + '%'">YES 63%</div>
+        <div class="trade-card-payout" x-text="'€' + parseFloat(tradeAmount).toFixed(2) + ' → €' + (parseFloat(tradeAmount) / yesProb).toFixed(2)">€10 → €15.87</div>
       </div>
       <p class="text-[11px] font-medium text-textMain mb-3 h-8">If Bulgaria adopts the Euro</p>
       <div class="trade-card-loss" x-text="'Max loss €' + parseFloat(tradeAmount).toFixed(2)">Max loss €10</div>
@@ -550,8 +550,8 @@ tailwind.config={
     <!-- NO card -->
     <div id="btn-trade-no" class="no-bg-tint rounded-card p-4 transition-all card-touch" :class="currentTradeSide === 'no' ? 'selected' : ''" @click="currentTradeSide = 'no'">
       <div class="trade-card-header">
-        <div class="trade-card-probability text-no">NO 37%</div>
-        <div class="trade-card-payout" x-text="'€' + tradeAmount + ' → €' + (tradeAmount / noProb).toFixed(2)">€10 → €27.03</div>
+        <div class="trade-card-probability text-no" x-text="'NO ' + Math.round(noProb * 100) + '%'">NO 37%</div>
+        <div class="trade-card-payout" x-text="'€' + parseFloat(tradeAmount).toFixed(2) + ' → €' + (parseFloat(tradeAmount) / noProb).toFixed(2)">€10 → €27.03</div>
       </div>
       <p class="text-[11px] font-medium text-textMain mb-3 h-8">If Bulgaria does NOT adopt</p>
       <div class="trade-card-loss" x-text="'Max loss €' + parseFloat(tradeAmount).toFixed(2)">Max loss €10</div>
@@ -639,8 +639,8 @@ tailwind.config={
       <h3 class="text-base font-bold text-textMain leading-snug mb-4">Will Bulgaria adopt the Euro before 2026?</h3>
       <div class="grid grid-cols-4 gap-2 text-sm mb-4">
         <div><div class="text-textMuted text-xs mb-1">Entry</div><div class="font-semibold">0.58</div></div>
-        <div><div class="text-textMuted text-xs mb-1">Current</div><div class="font-semibold">0.63</div></div>
-        <div><div class="text-textMuted text-xs mb-1">Profit</div><div class="font-bold text-yes">+€24</div></div>
+        <div><div class="text-textMuted text-xs mb-1">Current</div><div class="font-semibold" x-text="yesProb.toFixed(2)">0.63</div></div>
+        <div><div class="text-textMuted text-xs mb-1">Profit</div><div class="font-bold" :class="yesProb >= 0.58 ? 'text-yes' : 'text-no'" x-text="(yesProb >= 0.58 ? '+' : '') + '€' + Math.round((yesProb / 0.58 - 1) * 120)">+€10</div></div>
         <div><div class="text-textMuted text-xs mb-1">Size</div><div class="font-semibold">€120</div></div>
       </div>
       <button @click="open = !open" class="w-full bg-bg text-textMain font-semibold py-2 rounded-lg text-sm transition-colors hover:bg-border btn-press" x-text="open ? 'Hide details' : 'View details'">View details</button>
